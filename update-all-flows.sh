@@ -1,17 +1,18 @@
 #!/bin/bash
 
 ALL_UNITS=$(fleetctl list-units | grep octo- | grep -v octo-master | awk '{print $1}')
-
+UNITS_TO_RESTART=$(echo $ALL_UNITS | wc -w)
+INDEX=1
 for UNIT in $ALL_UNITS; do
-  echo $UNIT
+  printf "restarting:> %s\n" $UNIT
 
-  printf "stoping:> %s" $UNIT
+  printf "stoping:> %s\n" $UNIT
   fleetctl stop $UNIT
 
   printf "waiting:> for %s to stop " $UNIT;
-  is_running=1
-  while [ $is_running -ne 0 ]; do
-    is_running=`fleetctl list-units | grep running | grep $UNIT | wc -l`;
+  IS_RUNNING=1
+  while [ $IS_RUNNING -ne 0 ]; do
+    IS_RUNNING=$(fleetctl list-units | grep running | grep $UNIT | wc -l)
     sleep 1;
     printf ".";
   done
@@ -21,8 +22,8 @@ for UNIT in $ALL_UNITS; do
   fleetctl start $UNIT
 
   printf "waiting:> for %s to start " $UNIT;
-  while [ $is_running -eq 0 ]; do
-    is_running=`fleetctl list-units | grep running | grep $UNIT | wc -l`;
+  while [ $IS_RUNNING -eq 0 ]; do
+    IS_RUNNING=$(fleetctl list-units | grep running | grep $UNIT | wc -l)
     sleep 1;
     printf ".";
   done
@@ -30,4 +31,6 @@ for UNIT in $ALL_UNITS; do
 
   fleetctl list-units | grep $UNIT
 
+  printf "done restarting %d out of %d\n" $INDEX $UNITS_TO_RESTART
+  let INDEX++
 done
