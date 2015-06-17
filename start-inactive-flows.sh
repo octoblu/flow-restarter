@@ -1,10 +1,8 @@
 #!/bin/bash
 
-FAILED_UNITS=$(fleetctl list-units | grep octo- | grep -v octo-master | grep failed | awk '{print $1}')
+INACTIVE_FLOWS=$(fleetctl list-unit-files | grep octo- | grep -v octo-master | grep inactive | awk '{print $1}')
 
-for UNIT in $FAILED_UNITS; do
+for UNIT in $INACTIVE_FLOWS; do
   echo $UNIT
-  fleetctl unload $UNIT
+  fleetctl start $UNIT
 done
-
-  # fleetctl start $UNIT
