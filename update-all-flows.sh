@@ -6,10 +6,10 @@ INDEX=1
 for UNIT in $ALL_UNITS; do
   printf "restarting:> %s\n" $UNIT
 
-  printf "stoping:> %s\n" $UNIT
-  fleetctl stop $UNIT
+  printf "unloading:> %s\n" $UNIT
+  fleetctl unload $UNIT
 
-  printf "waiting:> for %s to stop " $UNIT;
+  printf "waiting:> for %s to unload " $UNIT;
   IS_RUNNING=1
   while [ $IS_RUNNING -ne 0 ]; do
     IS_RUNNING=$(fleetctl list-units | grep running | grep $UNIT | wc -l)
