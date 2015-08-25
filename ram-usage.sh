@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINERS=$(docker ps --no-trunc | grep -v octo-master | grep octo- | awk '{print $1":"$NF}')
+CONTAINERS=$(docker ps --no-trunc | grep -v UNIT | awk '{print $1":"$NF}')
 
 for CONTAINER in $CONTAINERS; do
   NAME=$(echo $CONTAINER | sed s/.*://g)
