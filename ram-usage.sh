@@ -6,7 +6,7 @@ for CONTAINER in $CONTAINERS; do
   NAME=$(echo $CONTAINER | sed s/.*://g)
   CONTAINER_ID=$(echo $CONTAINER | sed s/:.*//g)
 
-  MEM_USED=$(cat /sys/fs/cgroup/memory/system.slice/docker-$CONTAINER_ID.scope/memory.usage_in_bytes)
+  MEM_USED=$(cat /sys/fs/cgroup/memory/system.slice/docker-$CONTAINER_ID.scope/memory.usage_in_bytes | numfmt --to=iec-i)
 
   echo "$MEM_USED $NAME"
 done
